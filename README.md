@@ -34,7 +34,3 @@ pnpm dev # instead of npm run dev
 ```
 
 I initially encountered an error about a missing `app/ui/fonts.ts` file. That problem is addressed in [Chapter 3: Optimizing Fonts and Images](https://nextjs.org/learn/dashboard-app/optimizing-fonts-images).
-
-## Screenshot
-
-![Screenshot of React Foundations app](./public/screenshot.png "Screenshot of React Foundations app")
