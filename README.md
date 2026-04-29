@@ -53,3 +53,136 @@ You can enable the plugin in VS Code by:
 The styling issues, including an unsized right arrow SVG, are caused by an unimported stylesheet and will be addressed in [Chapter 2: CSS Styling](https://nextjs.org/learn/dashboard-app/css-styling).
 
 I initially encountered an error about a missing `app/ui/fonts.ts` file. That problem is addressed in [Chapter 3: Optimizing Fonts and Images](https://nextjs.org/learn/dashboard-app/optimizing-fonts-images).
+
+### Ch. 2: CSS Styling
+
+Associate CSS files with Tailwind in workspace settings:
+
+```json
+  "settings": {
+    "files.associations": {
+      "*.css": "tailwindcss",
+    },
+  }
+```
+
+### Ch. 6: Setting Up Your Database
+
+#### Connect Vercel and GitHub
+
+Vercel:
+
+- Create free account
+- Account Settings > Authentication > Sign-in Methods > GitHub -> Connect > (authorize GitHub)
+- Vercel Dashboard > Import Project > Import Git Repository
+
+By connecting your GitHub repository, whenever you push changes to your main branch, Vercel will automatically redeploy your application with no configuration needed.
+
+- Select a Git Namespace > Add GitHub Account > (Install Vercel app)
+- (repositories should appear in list after installation)
+
+#### New project
+
+- Dashboard > Projects (left sidebar) > Add New... > Project
+- Let's build something new -> Import Git Repository > (select repository `next-app-router`) -> Import button
+- (review Importing from GitHub, Project Name, Application Preset)
+- Press "Deploy" button
+- Should say "Congratulations! You just deployed a new project"
+- Press "Continue to Dashboard" button
+
+#### Install Neon integration
+
+Project Dashboard > Storage (left sidebar) > Neon > Create:
+
+- Create new Neon account
+- Installation Plans > Free
+
+#### Create database
+
+- Install Integration:
+    - Configuration and Plan:
+        - Installation Plans: Free
+        - Press "Continue" button
+    - Confirmation:
+        - Resource name: `next-app-router-db`
+        - Press "Create" button
+    - Database Provisioning:
+        - Should say "Your Neon database is ready to use. The database `next-app-router-db` has been successfully created"
+        - Press "Continue" button
+    - Connect a Project:
+        - Make sure `next-app-router` is selected
+        - Press "Connect" button
+        - Should see message "Connected project `next-app-router` to database."
+
+#### Copy secrets
+
+- Database dashboard: Project Dashboard > Storage > (select `next-app-router-db`)
+- .env.local tab > "Show secret" button > "Copy Snippet" button
+- Copy file `./env.example` to `./env` and paste snippet into it
+    - Keep AUTH lines, replace the rest with snippet
+
+#### To delete
+
+- Project:
+    - Project dashboard > Settings (left sidebar) > Delete Project
+- Database:
+    - Database dashboard > Settings (left sidebar) > Delete Database
+
+#### Examine database
+
+Project dashboard > (select project) > Storage tab > (select database) > Database Dashboard > "Open in Neon" button
+
+[Neon Console](https://console.neon.tech/) > (select database project)
+
+- SQL Editor tab to write queries
+- Tables tab to examine table structure
+
+### Ch. 6: Seed your database
+
+If there's an error when trying to seed the database use the Neon Console's "Tables" tab to drop all the tables. Otherwise there will be duplicate entries.
+
+- Click the name of a table
+- Click the three dots icon
+- Select "Drop"
+
+And then rerun the script by visiting [localhost:3000/seed](http://localhost:3000/seed).
+
+### Ch. 6: Executing Queries
+
+I found the instructions for how to modify `app/query/route.ts` unclear. Uncomment the entire file and remove the first `return Response.json()` statement in the function `GET()`. The code should look like this:
+
+```js
+import postgres from 'postgres';
+
+const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+
+async function listInvoices() {
+  const data = await sql`
+    SELECT invoices.amount, customers.name
+    FROM invoices
+    JOIN customers ON invoices.customer_id = customers.id
+    WHERE invoices.amount = 666;
+  `;
+
+  return data;
+}
+
+export async function GET() {
+  try {
+    return Response.json(await listInvoices());
+  } catch (error) {
+    return Response.json({ error }, { status: 500 });
+  }
+}
+```
+
+And here's the response after visiting [localhost:3000/query](http://localhost:3000/query). There should be only one invoice entry.
+
+```json
+[
+  {
+    "amount": 666,
+    "name": "Evil Rabbit"
+  }
+]
+```
