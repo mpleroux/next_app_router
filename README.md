@@ -186,3 +186,18 @@ And here's the response after visiting [localhost:3000/query](http://localhost:3
   }
 ]
 ```
+
+### Ch. 10: Adding Search and Pagination
+
+I had enabled the Chrome extension Dark Reader on [localhost:3000](http://localhost:3000) and it caused hydration errors on two unrelated images. The error message specifically called this out.
+
+```txt
+"A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded."
+```
