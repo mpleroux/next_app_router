@@ -201,3 +201,36 @@ I had enabled the Chrome extension Dark Reader on [localhost:3000](http://localh
 
 It can also happen if the client has a browser extension installed which messes with the HTML before React loaded."
 ```
+
+### Ch. 13: Improving Accessibility
+
+I experienced multiple errors with `eslint` due to compatibility issues. Some possible reasons from Claude:
+
+```txt
+"This is a compatibility issue between ESLint v10 and `eslint-plugin-react` v7.37.5. ESLint v10 changed its API, and the react plugin you have installed doesn't support it yet."
+
+"The issue is that `eslint.config.mjs` uses the flat config format, which requires ESLint v9+. ESLint v8 doesn't support that import."
+```
+
+The solution that eventually worked required using different versions of those libraries.
+
+- Discard any file changes you've made so far in this chapter
+- Delete the entire `node_modules` folder
+- Run `pnpm install` to restore the project to the way it worked at the end of the previous chapter
+- Don't follow the tutorial's instructions to install `eslint` and `eslint-config-next` with `pnpm`:
+
+```sh
+pnpm add -D eslint eslint-config-next
+```
+
+Instead, manually add these lines to `package.json` and run `pnpm install`:
+
+```json
+  "devDependencies": {
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.4",
+    "eslint-plugin-react": "^7.37.5",
+  },
+```
+
+After that the command `pnpm lint` should run without problems.
