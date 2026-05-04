@@ -202,6 +202,51 @@ I had enabled the Chrome extension Dark Reader on [localhost:3000](http://localh
 It can also happen if the client has a browser extension installed which messes with the HTML before React loaded."
 ```
 
+### Ch. 12: Handling errors
+
+I experienced an error in both `createInvoice()` and `updateInvoice()` of `/app/lib/actions.ts`:
+
+```txt
+Type '(formData: FormData) => Promise<{ message: string; }>' is not assignable to type 'string | ((formData: FormData) => void | Promise<void>) | undefined'.
+  Type '(formData: FormData) => Promise<{ message: string; }>' is not assignable to type '(formData: FormData) => void | Promise<void>'.
+    Type 'Promise<{ message: string; }>' is not assignable to type 'void | Promise<void>'.
+      Type 'Promise<{ message: string; }>' is not assignable to type 'Promise<void>'.
+        Type '{ message: string; }' is not assignable to type 'void'.
+```
+
+The form which uses `createInvoice()` in `/app/ui/invoices/create-form.tsx` expects a Promise and we're trying to return a string:
+
+```tsx
+  try {
+    await sql`
+      INSERT INTO invoices (customer_id, amount, status, date)
+      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+    `;
+  } catch (error) {
+    // We'll also log the error to the console for now
+    console.log(error);
+    return {
+      message: "Database Error: Failed to Create Invoice.",
+    };
+  }
+```
+
+I tried updating the types of `react` and `react-dom` by running `pnpm install @types/react@latest @types/react-dom@latest`, but that didn't resolve the problem.
+
+I found [some discussion](https://github.com/vercel/next-learn/issues/749#issuecomment-2380860411) online with no clear solution. For now I removed the `return` statements from the `catch` blocks.
+
+```tsx
+  try {
+    await sql`
+      INSERT INTO invoices (customer_id, amount, status, date)
+      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+    `;
+  } catch (error) {
+    // We'll also log the error to the console for now
+    console.log(error);
+  }
+```
+
 ### Ch. 13: Improving Accessibility
 
 I experienced multiple errors with `eslint` due to compatibility issues. Some possible reasons from Claude:
@@ -215,15 +260,10 @@ I experienced multiple errors with `eslint` due to compatibility issues. Some po
 The solution that eventually worked required using different versions of those libraries.
 
 - Discard any file changes you've made so far in this chapter
-- Delete the entire `node_modules` folder
+- Delete the entire `node_modules` folder with `rm -rf node_modules`
 - Run `pnpm install` to restore the project to the way it worked at the end of the previous chapter
-- Don't follow the tutorial's instructions to install `eslint` and `eslint-config-next` with `pnpm`:
-
-```sh
-pnpm add -D eslint eslint-config-next
-```
-
-Instead, manually add these lines to `package.json` and run `pnpm install`:
+- Verify everything works by running the server: `pnpm dev`
+- Don't follow the tutorial's instructions to install `eslint` and `eslint-config-next` with `pnpm`. Instead, manually add these lines to `package.json` and run `pnpm install`:
 
 ```json
   "devDependencies": {
