@@ -233,9 +233,9 @@ I removed the return messages as a temporary fix. If possible, ignore the error 
 
 I experienced multiple errors with `eslint` due to compatibility issues. Some possible reasons from Claude:
 
-"This is a compatibility issue between ESLint v10 and `eslint-plugin-react` v7.37.5. ESLint v10 changed its API, and the react plugin you have installed doesn't support it yet."
-
-"The issue is that `eslint.config.mjs` uses the flat config format, which requires ESLint v9+. ESLint v8 doesn't support that import."
+>"This is a compatibility issue between ESLint v10 and `eslint-plugin-react` v7.37.5. ESLint v10 changed its API, and the react plugin you have installed doesn't support it yet."
+>
+>"The issue is that `eslint.config.mjs` uses the flat config format, which requires ESLint v9+. ESLint v8 doesn't support that import."
 
 The solution that eventually worked required using different versions of those libraries.
 
