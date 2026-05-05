@@ -42,13 +42,11 @@ Enable [TypeScript plugin](https://nextjs.org/docs/app/api-reference/config/type
 
 Next.js includes a custom TypeScript plugin and type checker, which VSCode and other code editors can use for advanced type-checking and auto-completion.
 
-```txt
-You can enable the plugin in VS Code by:
+You can enable the plugin in VSCode by:
 
 1. Opening the command palette (Ctrl/⌘ + Shift + P)
 2. Searching for "TypeScript: Select TypeScript Version"
 3. Selecting "Use Workspace Version"
-```
 
 The styling issues, including an unsized right arrow SVG, are caused by an unimported stylesheet and will be addressed in [Chapter 2: CSS Styling](https://nextjs.org/learn/dashboard-app/css-styling).
 
@@ -192,14 +190,14 @@ And here's the response after visiting [localhost:3000/query](http://localhost:3
 I had enabled the Chrome extension Dark Reader on [localhost:3000](http://localhost:3000) and it caused hydration errors on two unrelated images. The error message specifically called this out.
 
 ```txt
-"A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
 - A server/client branch `if (typeof window !== 'undefined')`.
 - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
 - Date formatting in a user's locale which doesn't match the server.
 - External changing data without sending a snapshot of it along with the HTML.
 - Invalid HTML tag nesting.
 
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded."
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
 ```
 
 ### Ch. 12: Handling errors
@@ -265,7 +263,9 @@ rm -rf node_modules pnpm-lock.yaml
 
 After rebuilding `node_modules` to fix another problem I encountered a seemingly unrelated error with `postgres`:
 
-"Cannot find module 'postgres' or its corresponding type declarations."
+```txt
+Cannot find module 'postgres' or its corresponding type declarations.
+```
 
 The solution was to run the VSCode command "TypeScript: Restart TS server."
 
