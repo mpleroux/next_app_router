@@ -1,6 +1,6 @@
 # Next.js App Router Course
 
-See [App Router](https://nextjs.org/learn/dashboard-app) for more information.
+See the [App Router](https://nextjs.org/learn/dashboard-app) course introduction for more info.
 
 ## Notes
 
