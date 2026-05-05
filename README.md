@@ -280,3 +280,20 @@ Here is Claude Code's explanation:
 >3. Rebuilt its understanding of where postgres and its type definitions were located
 >
 >This is a common gotcha with `node_modules` changes—the language server doesn't automatically detect large filesystem changes like a fresh install. A restart forces it to rebuild its cache from the actual disk state."
+
+### Ch. 14: Login problems
+
+Be careful when entering the code for this chapter. One missing character caused two big problems that took some time to diagnose.
+
+`auth.config.ts`:
+
+```ts
+const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
+```
+
+Without that leading slash before `/dashboard` I was able to access the dashboard without authenticating. And every attempt to log in resulted in an `ERR_TOO_MANY_REDIRECTS` loop.
+
+>The URL path is `/dashboard`, not `dashboard`. The check is always failing.
+>
+>- Unauthenticated users can access `/dashboard` — `isOnDashboard` evaluates to false, so the code skips the dashboard protection and returns true
+>- Redirect loop when logging in — When you're logged in, `isOnDashboard` is still false, so it hits `else if (isLoggedIn)` and redirects to `/dashboard` again, creating the loop
