@@ -271,12 +271,12 @@ The solution was to run the VSCode command "TypeScript: Restart TS server."
 
 Here is Claude Code's explanation:
 
-"When you cleared `node_modules` and ran `pnpm install`, the file system changed—postgres got reinstalled in a fresh location. However, the TypeScript language server (the process running in VS Code that checks your types) had cached its understanding of the module graph from before you cleared dependencies.
-
-The cache told it: "postgres doesn't exist" even though it actually did on disk now. When you restarted the server, it:
-
-1. Cleared all its cached module resolution info
-2. Re-scanned `node_modules` from scratch
-3. Rebuilt its understanding of where postgres and its type definitions were located
-
-This is a common gotcha with `node_modules` changes—the language server doesn't automatically detect large filesystem changes like a fresh install. A restart forces it to rebuild its cache from the actual disk state."
+>"When you cleared `node_modules` and ran `pnpm install`, the file system changed—postgres got reinstalled in a fresh location. However, the TypeScript language server (the process running in VS Code that checks your types) had cached its understanding of the module graph from before you cleared dependencies.
+>
+>The cache told it: "postgres doesn't exist" even though it actually did on disk now. When you restarted the server, it:
+>
+>1. Cleared all its cached module resolution info
+>2. Re-scanned `node_modules` from scratch
+>3. Rebuilt its understanding of where postgres and its type definitions were located
+>
+>This is a common gotcha with `node_modules` changes—the language server doesn't automatically detect large filesystem changes like a fresh install. A restart forces it to rebuild its cache from the actual disk state."
