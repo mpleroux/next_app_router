@@ -208,13 +208,9 @@ I experienced an error in both `createInvoice()` and `updateInvoice()` of `/app/
 
 ```txt
 Type '(formData: FormData) => Promise<{ message: string; }>' is not assignable to type 'string | ((formData: FormData) => void | Promise<void>) | undefined'.
-  Type '(formData: FormData) => Promise<{ message: string; }>' is not assignable to type '(formData: FormData) => void | Promise<void>'.
-    Type 'Promise<{ message: string; }>' is not assignable to type 'void | Promise<void>'.
-      Type 'Promise<{ message: string; }>' is not assignable to type 'Promise<void>'.
-        Type '{ message: string; }' is not assignable to type 'void'.
 ```
 
-The form which uses `createInvoice()` in `/app/ui/invoices/create-form.tsx` expects a Promise and we're trying to return a string:
+The form which uses `createInvoice()` in `/app/ui/invoices/create-form.tsx` expects a `Promise` and we're returning a string:
 
 ```tsx
   try {
@@ -231,31 +227,15 @@ The form which uses `createInvoice()` in `/app/ui/invoices/create-form.tsx` expe
   }
 ```
 
-I tried updating the types of `react` and `react-dom` by running `pnpm install @types/react@latest @types/react-dom@latest`, but that didn't resolve the problem.
-
-I found [some discussion](https://github.com/vercel/next-learn/issues/749#issuecomment-2380860411) online with no clear solution. For now I removed the `return` statements from the `catch` blocks.
-
-```tsx
-  try {
-    await sql`
-      INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
-    `;
-  } catch (error) {
-    // We'll also log the error to the console for now
-    console.log(error);
-  }
-```
+I removed the return messages as a temporary fix. If possible, ignore the error while following the tutorial instructions through the end of Chapter 13. When both functions are wrapped in `useActionState()` the `formAction` returned by the hook will have the correct type signature `((formData: FormData) => Promise<void>)` that the form expects.
 
 ### Ch. 13: Improving Accessibility
 
 I experienced multiple errors with `eslint` due to compatibility issues. Some possible reasons from Claude:
 
-```txt
 "This is a compatibility issue between ESLint v10 and `eslint-plugin-react` v7.37.5. ESLint v10 changed its API, and the react plugin you have installed doesn't support it yet."
 
 "The issue is that `eslint.config.mjs` uses the flat config format, which requires ESLint v9+. ESLint v8 doesn't support that import."
-```
 
 The solution that eventually worked required using different versions of those libraries.
 
@@ -274,3 +254,23 @@ The solution that eventually worked required using different versions of those l
 ```
 
 After that the command `pnpm lint` should run without problems.
+
+### Ch. 13: Postgres error
+
+After rebuilding `node_modules` to fix another problem I encountered a seemingly unrelated error with `postgres`:
+
+"Cannot find module 'postgres' or its corresponding type declarations."
+
+The solution was to run the VSCode command "TypeScript: Restart TS server."
+
+Here is Claude Code's explanation:
+
+"When you cleared `node_modules` and ran `pnpm install`, the file system changed—postgres got reinstalled in a fresh location. However, the TypeScript language server (the process running in VS Code that checks your types) had cached its understanding of the module graph from before you cleared dependencies.
+
+The cache told it: "postgres doesn't exist" even though it actually did on disk now. When you restarted the server, it:
+
+1. Cleared all its cached module resolution info
+2. Re-scanned `node_modules` from scratch
+3. Rebuilt its understanding of where postgres and its type definitions were located
+
+This is a common gotcha with `node_modules` changes—the language server doesn't automatically detect large filesystem changes like a fresh install. A restart forces it to rebuild its cache from the actual disk state."
