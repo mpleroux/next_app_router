@@ -229,7 +229,7 @@ The form which uses `createInvoice()` in `/app/ui/invoices/create-form.tsx` expe
 
 I removed the return messages as a temporary fix. If possible, ignore the error while following the tutorial instructions through the end of Chapter 13. When both functions are wrapped in `useActionState()` the `formAction` returned by the hook will have the correct type signature `((formData: FormData) => Promise<void>)` that the form expects.
 
-### Ch. 13: Improving Accessibility
+### Ch. 13: eslint errors
 
 I experienced multiple errors with `eslint` due to compatibility issues. Some possible reasons from Claude:
 
@@ -240,10 +240,16 @@ I experienced multiple errors with `eslint` due to compatibility issues. Some po
 The solution that eventually worked required using different versions of those libraries.
 
 - Discard any file changes you've made so far in this chapter
-- Delete the entire `node_modules` folder with `rm -rf node_modules`
+- Delete the entire `node_modules` folder, prune unused packages, and reset dependencies
+
+```sh
+pnpm store prune
+rm -rf node_modules pnpm-lock.yaml
+```
+
 - Run `pnpm install` to restore the project to the way it worked at the end of the previous chapter
 - Verify everything works by running the server: `pnpm dev`
-- Don't follow the tutorial's instructions to install `eslint` and `eslint-config-next` with `pnpm`. Instead, manually add these lines to `package.json` and run `pnpm install`:
+- Ignore the tutorial's instructions to install `eslint` and `eslint-config-next` with `pnpm`. Instead, manually add these lines to `package.json` and run `pnpm install`:
 
 ```json
   "devDependencies": {
@@ -253,7 +259,7 @@ The solution that eventually worked required using different versions of those l
   },
 ```
 
-After that the command `pnpm lint` should run without problems.
+- After that the command `pnpm lint` should run without problems.
 
 ### Ch. 13: Postgres error
 
