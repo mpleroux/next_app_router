@@ -38,13 +38,13 @@ Create `.prettierrc` at the root level of the project and use the correct path f
 
 Enable [TypeScript plugin](https://nextjs.org/docs/app/api-reference/config/typescript#typescript-plugin) for VSCode:
 
-Next.js includes a custom TypeScript plugin and type checker, which VSCode and other code editors can use for advanced type-checking and auto-completion.
-
-You can enable the plugin in VSCode by:
-
-1. Opening the command palette (Ctrl/⌘ + Shift + P)
-2. Searching for "TypeScript: Select TypeScript Version"
-3. Selecting "Use Workspace Version"
+>Next.js includes a custom TypeScript plugin and type checker, which VSCode and other code editors can use for advanced type-checking and auto-completion.
+>
+>You can enable the plugin in VSCode by:
+>
+>1. Opening the command palette (Ctrl/⌘ + Shift + P)
+>2. Searching for "TypeScript: Select TypeScript Version"
+>3. Selecting "Use Workspace Version"
 
 The styling issues, including an unsized right arrow SVG, are caused by an unimported stylesheet and will be addressed in [Chapter 2: CSS Styling](https://nextjs.org/learn/dashboard-app/css-styling).
 
