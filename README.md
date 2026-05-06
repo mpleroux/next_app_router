@@ -10,7 +10,7 @@ See the [App Router](https://nextjs.org/learn/dashboard-app) course introduction
 npx create-next-app@latest next_app_router --example "https://github.com/vercel/next-learn/tree/main/dashboard/starter-example" --use-pnpm
 ```
 
-Install the VSCode [Prettier plugin](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
+Install the VSCode [Prettier plugin](https://github.com/tailwindlabs/prettier-plugin-tailwindcss):
 
 ```sh
 pnpm install -D prettier prettier-plugin-tailwindcss
